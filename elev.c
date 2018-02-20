@@ -68,6 +68,16 @@ void elev_set_motor_direction(elev_motor_direction_t dirn) {
     }
 }
 
+int elev_read_motor_direction(void) {
+    if (io_read_analog(MOTOR) == 0) {
+	return DIRN_STOP;
+    }
+    if (io_read_analog(MOTORDIR) == 0) {
+	return DIRN_UP;
+    }
+    return DIRN_DOWN;
+}
+
 void elev_set_door_open_lamp(int value) {
     if (value)
         io_set_bit(LIGHT_DOOR_OPEN);

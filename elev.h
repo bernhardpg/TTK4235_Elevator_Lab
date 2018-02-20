@@ -123,5 +123,9 @@ void elev_set_button_lamp(elev_button_type_t button, int floor, int value);
 */
 int elev_get_last_floor(int last_floor);
 
+/** Get direction
+*/ 
+
+int elev_read_motor_direction(void);
 
 #endif // #ifndef __INCLUDE_DRIVER_H__

@@ -1,6 +1,9 @@
 #include "controller.h"
 #include <stdio.h>
 #include "elev.h"
+#include "io.h"
+#include "channels.h"
+
 
 
 void controller() {
@@ -9,6 +12,9 @@ void controller() {
  
     // Initialize 'global' program variables
     int last_floor = -1;
+    struct request current_req;
+    
+    struct request queue[];
 
     // PROGRAM LOOP
     while (1) {
@@ -28,22 +34,27 @@ void controller() {
 
 	last_floor = elev_get_last_floor(last_floor);
 	//printf("last_floor: %d \n", last_floor);
-
-    }
+	
+	if (request_handler(current_request)) {
+	    handle_new_request(queue_get_next());
+	}
 }
 
 int initialize_hardware() {
     // Initialize hardware
     
-    elev_set_motor_direction(DIRN_UP);
-
     if (!elev_init()) {
 	printf("Unable to initialize elevator hardware!\n");
 	return 1;
     }
 
+    elev_set_motor_direction(DIRN_STOP);
+
     printf("Press STOP button to stop elevator and exit program.\n");
     return 0;
 }
-    
+
+void move_to_floor(int floor) {
+
+} 
 
