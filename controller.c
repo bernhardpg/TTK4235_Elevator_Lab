@@ -38,6 +38,7 @@ void controller() {
 	if (request_handler(current_request)) {
 	    handle_new_request(queue_get_next());
 	}
+    }
 }
 
 int initialize_hardware() {
