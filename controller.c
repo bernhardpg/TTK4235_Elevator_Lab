@@ -35,7 +35,7 @@ void controller() {
 	last_floor = elev_get_last_floor(last_floor);
 	//printf("last_floor: %d \n", last_floor);
 	
-	if (request_handler(current_request)) {
+	if (request_handler(current_request.floor, last_floor)) {
 	    handle_new_request(queue_get_next());
 	}
     }
@@ -59,3 +59,13 @@ void move_to_floor(int floor) {
 
 } 
 
+// forslag til request handler
+bool request_handler(int current_request_floor, int last_floor) {
+    if (elev_get_floor_sensor_signal() == current_request.floor) {
+	return true;
+    } else {
+	if (current_request.floor < last_floor) {
+	    elev_set_motor_direction(DIRN_DOWN);
+	} else if (current_request.floor > last_floor) {
+	    elev_set_motor_direction(DIRN_UP);
+}
