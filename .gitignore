@@ -1,6 +1,8 @@
 .DS_Store
 Icon?
 
-.out
-.o
-.hex
+*.out
+*.o
+*.hex
+
+heis
