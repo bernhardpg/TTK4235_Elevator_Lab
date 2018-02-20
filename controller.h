@@ -11,5 +11,7 @@ void controller();
 
 int initialize_hardware();
 
+bool request_handler(int current_request.floor, int last_floor);
+
 
 #endif
