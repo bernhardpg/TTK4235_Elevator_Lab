@@ -28,6 +28,7 @@ void queue_reset(bool queue[N_FLOORS][N_BUTTONS], int floor);
 /**
  Looks for new requests added by the user.
  @param queue The request queue.
+ @return Returns true if something in the queue was updated.
 */
 bool queue_update(bool queue[N_FLOORS][N_BUTTONS]);
 
@@ -36,7 +37,7 @@ bool queue_update(bool queue[N_FLOORS][N_BUTTONS]);
  Returns the next floor to move the elevator to.
  @return Floor number as integer between 0-3.
 */
-int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS], int directon, int last_floor);
+int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS], int directon, int last_floor, bool all_orders);
 
 
 #endif

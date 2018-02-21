@@ -36,16 +36,17 @@ bool queue_update(bool queue[N_FLOORS][N_BUTTONS]) {
 
 
 int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
-		int direction, int last_floor) {
+		int direction, int last_floor, bool all_orders) {
     
-    int button_row;
     // Find the closest request in the same direction
     // or without direction (from cmd buttons)
     switch (direction) {
 	    case DIRN_UP:
-		button_row = 0;
 		for (int i = last_floor; i < N_FLOORS; i++) {
-		    if ((queue[i][button_row])
+		    if (all_orders && queue[i][2]) {
+			return i;
+		    }
+		    if ((queue[i][0])
 			    || (queue[i][1])) {
 			return i;
 		    }
@@ -53,9 +54,11 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
 		break;
 
 	    case DIRN_DOWN:
-		button_row = 2;
 		for (int i = last_floor; i > 0; i--) {
-		    if ((queue[i][button_row])
+		    if (all_orders && queue[i][0]) {
+			    return i;
+		    }
+		    if ((queue[i][2])
 			    || (queue[i][1])) {
 			return i;
 		    }
@@ -63,7 +66,6 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
 		break;
     }
 
-    // No more requests in the same direction
-    // or from the cmd buttons.
+    // No more requests in the same direction or from the cmd buttons.
     return -1;
 }
