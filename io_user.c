@@ -19,7 +19,7 @@ int elev_get_last_floor(int last_floor) {
     if ((floor_sensor_signal != last_floor)
 	    && (floor_sensor_signal > -1)) {
 
-	return floor_sensor_signal;
+				return floor_sensor_signal;
     }
     
     return last_floor;
@@ -27,11 +27,10 @@ int elev_get_last_floor(int last_floor) {
 
 
 
-void stop_handler(bool **queue, int current_floor) {
+void stop_handler(){
 		elev_set_door_open_lamp(1); 
 		delay(3000);
 		elev_set_door_open_lamp(0); 
-		queue_reset(queue,current_floor)
 
 }
 
