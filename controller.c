@@ -1,5 +1,7 @@
 #include "controller.h"
 #include <stdio.h>
+#include <stdbool.h>
+
 #include "elev.h"
 #include "io.h"
 #include "channels.h"
@@ -12,9 +14,7 @@ void controller() {
  
     // Initialize 'global' program variables
     int last_floor = -1;
-    struct request current_req;
-    
-    struct request queue[];
+    struct request current_request;
 
     // PROGRAM LOOP
     while (1) {
