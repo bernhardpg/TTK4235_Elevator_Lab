@@ -1,31 +1,42 @@
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
 
+#include "elev.h"
+
 /**
- Struct to be used to contain the information from the different
- requests requested by the user.
+ Initialize all element of the queue to false 
 */
-struct request {
-    int floor, direction;
-};
+void queue_init(bool queue[N_FLOORS][N_BUTTONS]);
 
 
 /**
- Returns next request to be handled from the queue.
+ Resets a 'bit' in the queue table.
+ @param queue Pointer to the first element in the queue.
+ @param floor, button Which button to set in the table.
 */
-struct request queue_get_next_req(int elev_direction, struct request * queue);
+void queue_set(bool queue[N_FLOORS][N_BUTTONS], int floor, int button);
+
 
 /**
- Adds a new request to the queue.
- Returns a pointer to the first element in the new queue.
+ Resets an entire row of 'bits' in the queue table.
+ @param queue The request queue.
+ @param floor Which row to reset in the table.
+ @param N_BUTTONS Number of rows to reset.
 */
-struct request * queue_add_request(struct request new_request, struct request * queue);
+void queue_reset(bool queue[N_FLOORS][N_BUTTONS], int floor);
 
 /**
- Removes a request from the queue.
- Returns a pointer to the first element in the new queue.
+ Looks for new requests added by the user.
+ @param queue The request queue.
 */
-struct request * queue_remove_request(struct request old_request, struct request * queue);
+bool queue_update(bool queue[N_FLOORS][N_BUTTONS]);
+
+
+/**
+ Returns the next floor to move the elevator to.
+ @return Floor number as integer between 0-3.
+*/
+int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS], int directon, int last_floor);
 
 
 #endif
