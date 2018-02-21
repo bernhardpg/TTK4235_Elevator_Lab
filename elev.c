@@ -68,7 +68,7 @@ void elev_set_motor_direction(elev_motor_direction_t dirn) {
     }
 }
 
-int elev_read_motor_direction(void) {
+int elev_get_motor_direction(void) {
     if (io_read_analog(MOTOR) == 0) {
 	return DIRN_STOP;
     }
