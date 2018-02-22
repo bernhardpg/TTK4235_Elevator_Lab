@@ -8,6 +8,7 @@
 
 // Number of floors
 #define N_FLOORS 4
+#define N_BUTTONS 3
 
 
 
@@ -124,6 +125,13 @@ int elev_get_button_signal(elev_button_type_t button, int floor);
 */
 void elev_set_button_lamp(elev_button_type_t button, int floor, int value);
 
+/**
+  Gets value of button lamp
+  @param lamp which type of lamp to get
+  @param floor which floor to check 
+  return 0 (lamp is off) or 1 (lamp is on) 
+*/ 
+void elev_get_button_lamp(elev_button_type_t button, int floor);
 
 /**
  Get last known elevator position.
