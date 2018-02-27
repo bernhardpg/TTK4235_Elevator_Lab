@@ -1,31 +1,55 @@
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
 
-/**
- Struct to be used to contain the information from the different
- requests requested by the user.
-*/
-struct request {
-    int floor, direction;
-};
-
+#include <stdbool.h>
+#include "elev.h"
 
 /**
- Returns next request to be handled from the queue.
+ Initialize all element of the queue to false 
 */
-struct request queue_get_next_req(int elev_direction, struct request * queue);
+void queue_init(bool queue[N_FLOORS][N_BUTTONS]);
+
 
 /**
- Adds a new request to the queue.
- Returns a pointer to the first element in the new queue.
+ Resets a 'bit' in the queue table.
+ @param queue Pointer to the first element in the queue.
+ @param floor, button Which button to set in the table.
 */
-struct request * queue_add_request(struct request new_request, struct request * queue);
+void queue_set(bool queue[N_FLOORS][N_BUTTONS], int floor, int button);
+
 
 /**
- Removes a request from the queue.
- Returns a pointer to the first element in the new queue.
+ Resets an entire row of 'bits' in the queue table.
+ @param queue The request queue.
+ @param floor Which row to reset in the table.
+ @param N_BUTTONS Number of rows to reset.
 */
-struct request * queue_remove_request(struct request old_request, struct request * queue);
+void queue_reset(bool queue[N_FLOORS][N_BUTTONS], int floor);
 
+/**
+ Looks for new requests added by the user.
+ @param queue The request queue.
+ @return Returns true if something in the queue was updated.
+*/
+bool queue_update(bool queue[N_FLOORS][N_BUTTONS]);
+
+
+/**
+ Returns the next floor to move the elevator to.
+ If elevator is moving up: checks for new orders to
+ floors above the current floor.
+ If elevator is moving down: checks for new orders to
+ floors below the current floor.
+ @return Floor number as integer between 0-3.
+ @return -1 if there are no orders above/below the current floor.
+*/
+int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS], int directon, int last_floor);
+
+
+/**
+ Checks whether the queue is empty or not.
+ @return true if queue is empty, false if queue is not empty.
+*/
+bool queue_empty(bool queue[N_FLOORS][N_BUTTONS]);
 
 #endif
