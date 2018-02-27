@@ -152,4 +152,9 @@ int elev_get_last_floor(int last_floor);
 int elev_set_direction(int direction, int next_floor, int last_floor);
 
 
+/**
+ Initilize the elevator to start position.
+*/
+int elev_initialize_hardware(int direction);
+
 #endif // #ifndef __INCLUDE_DRIVER_H__

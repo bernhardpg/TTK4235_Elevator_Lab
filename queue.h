@@ -58,4 +58,10 @@ bool queue_empty(bool queue[N_FLOORS][N_BUTTONS]);
 void queue_print(bool queue[N_FLOORS][N_BUTTONS]);
 
 
+/**
+ Clears the entire queue.
+*/
+void queue_clear(bool queue[N_FLOORS][N_BUTTONS]);
+
+
 #endif

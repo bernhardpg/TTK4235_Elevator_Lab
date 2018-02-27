@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 static const int lamp_channel_matrix[N_FLOORS][N_BUTTONS] = {
     {LIGHT_UP1, LIGHT_DOWN1, LIGHT_COMMAND1},
@@ -186,4 +187,19 @@ int elev_set_direction(int direction, int next_floor, int last_floor) {
     elev_set_motor_direction(direction);
 
     return direction;
+}
+
+
+int elev_initialize_hardware(int direction) {
+    // Initialize hardware
+    
+    if (!elev_init()) {
+	printf("Unable to initialize elevator hardware!\n");
+	return 1;
+    }
+    
+    elev_set_motor_direction(direction);
+
+    printf("Press STOP button to stop elevator and exit program.\n");
+    return 0;
 }

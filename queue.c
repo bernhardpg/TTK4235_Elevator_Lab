@@ -133,3 +133,12 @@ void queue_print(bool queue[N_FLOORS][N_BUTTONS]) {
     }
     printf("\n\n*****\n\n");
 }
+
+void queue_clear(bool queue[N_FLOORS][N_BUTTONS]) {
+    for (int i = 0; i < N_FLOORS; i++) {
+	for (int j = 0; j < N_BUTTONS; j++) {
+	    queue[i][j] = 0;
+	}
+    }
+}
+
