@@ -60,6 +60,6 @@ void delay(int ms) {
 
     clock_t start_time = clock();
 
-    while (clock() < start_time + time) {update_queue}
+    while (clock() < start_time + time);
 }
 

@@ -6,6 +6,7 @@
 #include "io.h"
 #include "channels.h"
 #include "queue.h"
+#include "io_user.h"
 
 void controller() {
 
@@ -86,7 +87,7 @@ void controller() {
 	    // if the queue now is empty.
 	    if (next_floor == last_floor) {
 		elev_set_motor_direction(DIRN_STOP);
-		light_and_door_handler(last_floor);
+		door_and_lights_handler(last_floor);
 
 		queue_reset(queue, last_floor);
 
