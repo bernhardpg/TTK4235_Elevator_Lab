@@ -145,6 +145,11 @@ Returns the current/last floor
 int elev_get_last_floor(int last_floor);
 
 
+/**
+ Sets direction depending on next_floor and last_floor.
+ @return direction.
+*/
+int elev_set_direction(int direction, int next_floor, int last_floor);
 
 
 #endif // #ifndef __INCLUDE_DRIVER_H__

@@ -75,16 +75,8 @@ void controller() {
 	    // Break out of IDLE STATE once there are any orders.
 	    if (queue_update(queue)) {
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
-		
-		// Start elevator in the right direction
-		if (next_floor > last_floor) {
-		    direction = DIRN_UP;
-		}
-		else {
-		    direction = DIRN_DOWN;
-		}
-		
-		elev_set_motor_direction(direction);
+    
+		direction = elev_set_direction(direction, next_floor, last_floor);	
 
 		printf("next_floor: %d\n", next_floor);
 		printf("last_floor: %d\n", last_floor);
@@ -146,7 +138,7 @@ void controller() {
 		    queue_print(queue);
 
 		    if (next_floor != -1) {
-			elev_set_motor_direction(direction);
+			direction = elev_set_direction(direction, next_floor, last_floor);	
 		    }
 		}
 	    }
@@ -181,12 +173,3 @@ int initialize_hardware(int direction) {
     printf("Press STOP button to stop elevator and exit program.\n");
     return 0;
 }
-
-
-/**
- * Fix initiliaze for heis
- * fiks at man kalles queue_get_next_floor 7 ganger. Det går ikke
- *
- *
- *
- **/

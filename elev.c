@@ -171,3 +171,19 @@ int elev_get_last_floor(int last_floor) {
     
     return last_floor;
 }
+
+
+int elev_set_direction(int direction, int next_floor, int last_floor) {
+
+    // Start elevator in the right direction
+    if (next_floor > last_floor) {
+	direction = DIRN_UP;
+    }
+    else {
+	direction = DIRN_DOWN;
+    }
+
+    elev_set_motor_direction(direction);
+
+    return direction;
+}
