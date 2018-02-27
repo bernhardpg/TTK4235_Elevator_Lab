@@ -131,7 +131,7 @@ void elev_set_button_lamp(elev_button_type_t button, int floor, int value);
   @param floor which floor to check 
   return 0 (lamp is off) or 1 (lamp is on) 
 */ 
-void elev_get_button_lamp(elev_button_type_t button, int floor);
+int elev_get_button_lamp(elev_button_type_t button, int floor);
 
 /**
  Get last known elevator position.
