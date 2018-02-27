@@ -52,4 +52,9 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS], int directon, int last
 */
 bool queue_empty(bool queue[N_FLOORS][N_BUTTONS]);
 
+/**
+ Prints the queue.
+*/
+void queue_print(bool queue[N_FLOORS][N_BUTTONS]);
+
 #endif

@@ -156,3 +156,18 @@ void elev_set_button_lamp(elev_button_type_t button, int floor, int value) {
 int elev_get_button_lamp(elev_button_type_t button, int floor) {
 		return lamp_channel_matrix[floor][button];
 }
+
+
+int elev_get_last_floor(int last_floor) {
+    // Gets last floor
+
+    int floor_sensor_signal = elev_get_floor_sensor_signal();
+
+    if ((floor_sensor_signal != last_floor)
+	    && (floor_sensor_signal > -1)) {
+
+				return floor_sensor_signal;
+    }
+    
+    return last_floor;
+}

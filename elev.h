@@ -139,4 +139,12 @@ int elev_get_button_lamp(elev_button_type_t button, int floor);
 */
 int elev_get_last_floor(int last_floor);
 
+/**
+Returns the current/last floor
+*/ 
+int elev_get_last_floor(int last_floor);
+
+
+
+
 #endif // #ifndef __INCLUDE_DRIVER_H__

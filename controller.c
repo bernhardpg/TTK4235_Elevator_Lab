@@ -10,7 +10,6 @@
 
 void controller() {
 
-    initialize_hardware();
 
     /**
     // INITIALIZE ELEVATOR - LOOP
@@ -34,8 +33,9 @@ void controller() {
     }*/
 
     // Initialize 'global' program variables
+    int current_floor = -1;
     int last_floor = -1;
-    int direction = DIRN_STOP; 
+    int direction = DIRN_UP;  // Which direction to look for new orders
     int next_floor = -1;
 
     bool queue[N_FLOORS][N_BUTTONS];
@@ -43,9 +43,22 @@ void controller() {
 
     bool no_orders = true;
 
+    initialize_hardware(direction);
+
+    // INITIALIZE LOOP
+    while (1) {
+	last_floor = elev_get_last_floor(last_floor);
+
+	if (last_floor != -1) {
+	    elev_set_motor_direction(DIRN_STOP);
+	    printf("CHANGING TO IDLE STATE\n");
+	    break;
+	}
+    }
+
     // PROGRAM LOOP
     while (1) {
-	
+
 	// STOP HANDLER - Stop elevator and exit program if the stop button is pressed
 	// **********
 	if (elev_get_stop_signal()) {
@@ -62,7 +75,23 @@ void controller() {
 	    // Break out of IDLE STATE once there are any orders.
 	    if (queue_update(queue)) {
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
+		
+		// Start elevator in the right direction
+		if (next_floor > last_floor) {
+		    direction = DIRN_UP;
+		}
+		else {
+		    direction = DIRN_DOWN;
+		}
+		
+		elev_set_motor_direction(direction);
+
+		printf("next_floor: %d\n", next_floor);
+		printf("last_floor: %d\n", last_floor);
+		queue_print(queue);
+
 		no_orders = false;
+		printf("CHANGING TO RUNNING STATE\n");
 	    }
 	}
 
@@ -72,6 +101,7 @@ void controller() {
 	    // Update last_floor for every iteration of the
 	    // program loop while the program is in RUNNING STATE.
 	    last_floor = elev_get_last_floor(last_floor);
+	    current_floor = elev_get_floor_sensor_signal();
 
 	    // Look for new orders from users
 	    // and update which order to exectute if the new order
@@ -79,19 +109,30 @@ void controller() {
 	    // (does not change directon or affect the engine)
 	    if (queue_update(queue)) {
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
+		printf("next_floor: %d\n", next_floor);
+		printf("last_floor: %d\n", last_floor);
+		queue_print(queue);
 	    }
 
 	    // Stop the elevator and open the doors for three
 	    // seconds when a destination is reached,
 	    // clear out the queue and go into IDLE STATE
 	    // if the queue now is empty.
-	    if (next_floor == last_floor) {
+	    if ((next_floor == last_floor)
+		    && (next_floor == current_floor)) {
 		elev_set_motor_direction(DIRN_STOP);
 		door_and_lights_handler(last_floor);
+		printf("Stopping at floor: %d\n", last_floor);
 
 		queue_reset(queue, last_floor);
 
 		if (queue_empty(queue)) {
+		    printf("CHANGING TO IDLE STATE:\n");
+		    printf("next_floor: %d\n", next_floor);
+		    printf("last_floor: %d\n", last_floor);
+		    queue_print(queue);
+
+		    printf("DONE CHANGING TO IDLE STATE\n");
 		    no_orders = true;
 		}
 
@@ -100,6 +141,10 @@ void controller() {
 		// is not empty and if there exists such a new order.
 		else {
 		    next_floor = queue_get_next_floor(queue, direction, last_floor);
+		    printf("next_floor: %d\n", next_floor);
+		    printf("last_floor: %d\n", last_floor);
+		    queue_print(queue);
+
 		    if (next_floor != -1) {
 			elev_set_motor_direction(direction);
 		    }
@@ -113,22 +158,25 @@ void controller() {
 		direction *= -1;
 		elev_set_motor_direction(direction);
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
+		
+		printf("******\nCHANGING DIRECTION\n******\n");
+		printf("next_floor: %d\n", next_floor);
+		printf("last_floor: %d\n", last_floor);
+		queue_print(queue);
 	    }
 	}
     }
 }
 
-int initialize_hardware() {
+int initialize_hardware(int direction) {
     // Initialize hardware
     
     if (!elev_init()) {
 	printf("Unable to initialize elevator hardware!\n");
 	return 1;
     }
-
-    elev_set_motor_direction(DIRN_STOP);
-    // Set a start direction.
-    // TO BE REPLACED
+    
+    elev_set_motor_direction(direction);
 
     printf("Press STOP button to stop elevator and exit program.\n");
     return 0;

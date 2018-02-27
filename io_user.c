@@ -11,34 +11,21 @@
 #include <stdbool.h>
 
 
-
-int elev_get_last_floor(int last_floor) {
-    // Gets last floor
-
-    int floor_sensor_signal = elev_get_floor_sensor_signal();
-
-    if ((floor_sensor_signal != last_floor)
-	    && (floor_sensor_signal > -1)) {
-
-				return floor_sensor_signal;
-    }
-    
-    return last_floor;
-}
-
-
-
 void door_and_lights_handler(int current_floor){
     //Opens the door for 3 seconds
     elev_set_door_open_lamp(1); 
     delay(3000);  
     elev_set_door_open_lamp(0); 
+    int i = current_floor;
 
     // Shuts of all the lights on current floor (all orders on
     // current floor completed)
-    for (int i = 0; i < 3; i++) {
-	elev_set_button_lamp(i, current_floor, 0);
+    for (int j = 0; j < 3; j++) {
+	if (!((i == 0) && (j == 1))
+		&& !((i == 3) && (j == 0))) {
+	    //elev_set_button_lamp(j, i, 0);
 	}
+    }
 }
 
 void set_ordered_lights(bool** queue) {
@@ -46,8 +33,11 @@ void set_ordered_lights(bool** queue) {
     // queue is updated)
     for (int i = 0; i < 3; i++)	{
 	for (int j = 0; j < 3; j++) {
-	    if (queue[i][j] == true && elev_get_button_lamp(j,i) == 0) {
-		elev_set_button_lamp(j,i,1);
+	    if ((queue[i][j] == true)
+		    && !((i == 0) && (j == 1))
+		    && !((i == 3) && (j == 0))
+		    && (elev_get_button_lamp(j,i) == 0)) {
+		// elev_set_button_lamp(j,i,1);
 	    }
 	}
     } 

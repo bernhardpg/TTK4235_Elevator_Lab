@@ -10,5 +10,5 @@ void controller();
 /**
  Initilize the elevator to start position.
 */
-int initialize_hardware();
+int initialize_hardware(int direction);
 #endif

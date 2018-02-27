@@ -3,11 +3,6 @@
 
 #include <stdbool.h>
 
-/**
-Returns the current/last floor
-*/ 
-int elev_get_last_floor(int last_floor);
-
 
 /** 
 Stop_handler is the function that opens the door, turns off
