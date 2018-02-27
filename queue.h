@@ -1,6 +1,7 @@
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
 
+#include <stdbool.h>
 #include "elev.h"
 
 /**
@@ -35,9 +36,20 @@ bool queue_update(bool queue[N_FLOORS][N_BUTTONS]);
 
 /**
  Returns the next floor to move the elevator to.
+ If elevator is moving up: checks for new orders to
+ floors above the current floor.
+ If elevator is moving down: checks for new orders to
+ floors below the current floor.
  @return Floor number as integer between 0-3.
+ @return -1 if there are no orders above/below the current floor.
 */
-int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS], int directon, int last_floor, bool all_orders);
+int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS], int directon, int last_floor);
 
+
+/**
+ Checks whether the queue is empty or not.
+ @return true if queue is empty, false if queue is not empty.
+*/
+bool queue_empty(bool queue[N_FLOORS][N_BUTTONS]);
 
 #endif

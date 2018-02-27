@@ -11,6 +11,7 @@ void controller() {
 
     initialize_hardware();
 
+    /**
     // INITIALIZE ELEVATOR - LOOP
     while (1) {
 	// Update last_floor
@@ -29,7 +30,7 @@ void controller() {
 	    direction = DIRN_UP;
 	    elev_set_motor_direction(direction);
 	}
-    }
+    }*/
 
     // Initialize 'global' program variables
     int last_floor = -1;
@@ -40,83 +41,77 @@ void controller() {
     queue_init(queue);
 
     bool no_orders = true;
-    bool door_open = false;
 
     // PROGRAM LOOP
     while (1) {
 	
 	// STOP HANDLER - Stop elevator and exit program if the stop button is pressed
+	// **********
 	if (elev_get_stop_signal()) {
 	    elev_set_motor_direction(DIRN_STOP);    
 	    break;
 	}
 
-	// IDLE STATE - Do nothing while there are no orders
+	// IDLE STATE - Do not move the elevator while there are no orders.
+	// *********
 	if (no_orders) {
-	    // Check for new orders
+	    
+	    // Check for new orders for every iteration of the
+	    // program loop while the program is in IDLE STATE.
+	    // Break out of IDLE STATE once there are any orders.
 	    if (queue_update(queue)) {
-		// Break out of idle state
-		next_floor = queue_get_next_floor(queue, direction, last_floor, false);
+		next_floor = queue_get_next_floor(queue, direction, last_floor);
 		no_orders = false;
-		// Close door
-		elev_set_door_open_light(0);
 	    }
 	}
 
 	// RUNNING STATE - Elevator is running
+	// ***********
 	else {
-	    // Update last_floor
+	    // Update last_floor for every iteration of the
+	    // program loop while the program is in RUNNING STATE.
 	    last_floor = elev_get_last_floor(last_floor);
 
-	    // Look for new orders
+	    // Look for new orders from users
+	    // and update which order to exectute if the new order
+	    // is better suited to the current direction and floor.
+	    // (does not change directon or affect the engine)
 	    if (queue_update(queue)) {
-		// If there are any new orders, look for a closer one in the same direction.
-		next_floor = queue_get_next_floor(queue, direction, last_floor, false);
-		if (next_floor == -1) {
-		    direction *= 1;
-		    next_floor = queue_get_next_floor(queue, direction, last_floor, false);
-		}
+		next_floor = queue_get_next_floor(queue, direction, last_floor);
 	    }
 
-	    // When a destination is reached
+	    // Stop the elevator and open the doors for three
+	    // seconds when a destination is reached,
+	    // clear out the queue and go into IDLE STATE
+	    // if the queue now is empty.
 	    if (next_floor == last_floor) {
-		// Stop elevator temporary
 		elev_set_motor_direction(DIRN_STOP);
-		// Set door_open_light for 3 seconds
 		light_and_door_handler(last_floor);
 
-		// Clear out this floor from the queue
 		queue_reset(queue, last_floor);
 
-		// Check if queue now is empty
 		if (queue_empty(queue)) {
-		    // Go into IDLE STATE
-		    elev_set_door_open_light(1);
 		    no_orders = true;
 		}
+
+		// Look for a new order to execute (with the current
+		// motor direction), and start the engine if the queue
+		// is not empty and if there exists such a new order.
 		else {
-		    // Get new next_floor
-		    next_floor = queue_get_next_floor(queue, direction, last_floor, false);
-		    if (next_floor == -1) {
-			direction *= -1;
-			next_floor = queue_get_next_floor(queue, direction, last_floor, false);
+		    next_floor = queue_get_next_floor(queue, direction, last_floor);
+		    if (next_floor != -1) {
+			elev_set_motor_direction(direction);
 		    }
 		}
 	    }
 	    
-	    // next_floor == -1 but the queue can't be empty
-	    // Look for ALL orders
+	    // Change direction, start engine and get new order if
+	    // there are no more orders in the same direction as
+	    // the elevator is currently moving.
 	    if (next_floor == -1) {
-		next_floor = queue_get_next_floor(queue, direction, last_floor, true);
-		if (next_floor == -1) {
-			direction *= -1;
-			next_floor = queue_get_next_floor(queue, direction, last_floor, true);
-		}
-	    }
-
-	    // Start elevator if it has stopped
-	    if (elev_not_moving) {
+		direction *= -1;
 		elev_set_motor_direction(direction);
+		next_floor = queue_get_next_floor(queue, direction, last_floor);
 	    }
 	}
     }
