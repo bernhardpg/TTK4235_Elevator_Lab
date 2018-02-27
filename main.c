@@ -36,18 +36,17 @@ int main () {
     // PROGRAM LOOP
     while (1) {
 
-	// STOP HANDLER - Stop elevator and exit program if the stop button is pressed
+	// STOP HANDLER - Stop elevator, clear queue, turn off all lights 
+	// and open  door if currently on a floor
 	// **********
 	if (elev_get_stop_signal()) {
 	    elev_set_stop_lamp(1);
 	    if (!no_orders) {
-		elev_set_motor_direction(DIRN_STOP);    
-		queue_clear(queue);
-		no_orders = true;
+			elev_stop_button_handler(current_floor);
+			queue_init(queue);
+			no_orders = true;
 	    }
 	}
-	
-	elev_set_floor_indicator(last_floor);
 	
 	// IDLE STATE - Do not move the elevator while there are no orders.
 	// *********
@@ -57,7 +56,6 @@ int main () {
 	    // program loop while the program is in IDLE STATE.
 	    // Break out of IDLE STATE once there are any orders.
 	    if (queue_update(queue)) {
-		printf("TURING ON LIGHTS");
 		
 		set_ordered_lights(queue);
 

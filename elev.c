@@ -203,3 +203,27 @@ int elev_initialize_hardware(int direction) {
     printf("Press STOP button to stop elevator and exit program.\n");
     return 0;
 }
+
+
+void elev_stop_button_handler(int current_floor) {
+	//Stops motor
+	elev_set_motor_direction(DIRN_STOP);
+
+	//Turns all lights off since queue is cleared
+	for (i = 0; i < N_FLOORS; ++i) {
+        if (i != 0)
+            elev_set_button_lamp(BUTTON_CALL_DOWN, i, 0);
+
+        if (i != N_FLOORS - 1)
+            elev_set_button_lamp(BUTTON_CALL_UP, i, 0);
+
+        elev_set_button_lamp(BUTTON_COMMAND, i, 0);
+    }
+	
+	//If elev currently on floor, door opens
+	if (current_floor != -1) {
+		elev_set_door_open(1);
+	
+	
+}
+
