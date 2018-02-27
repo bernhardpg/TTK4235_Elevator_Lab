@@ -154,7 +154,7 @@ void elev_set_button_lamp(elev_button_type_t button, int floor, int value) {
 
 
 int elev_get_button_lamp(elev_button_type_t button, int floor) {
-		return lamp_channel_matrix[floor][button];
+    return lamp_channel_matrix[floor][button];
 }
 
 

@@ -63,9 +63,12 @@ void controller() {
 	// **********
 	if (elev_get_stop_signal()) {
 	    elev_set_motor_direction(DIRN_STOP);    
+	    elev_set_stop_lamp(1);
 	    break;
 	}
-
+	
+	elev_set_floor_indicator(last_floor);
+	
 	// IDLE STATE - Do not move the elevator while there are no orders.
 	// *********
 	if (no_orders) {
@@ -74,6 +77,10 @@ void controller() {
 	    // program loop while the program is in IDLE STATE.
 	    // Break out of IDLE STATE once there are any orders.
 	    if (queue_update(queue)) {
+		printf("TURING ON LIGHTS");
+		
+		set_ordered_lights(queue);
+
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
     
 		direction = elev_set_direction(direction, next_floor, last_floor);	
@@ -100,6 +107,8 @@ void controller() {
 	    // is better suited to the current direction and floor.
 	    // (does not change directon or affect the engine)
 	    if (queue_update(queue)) {
+		set_ordered_lights(queue);
+
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
 		printf("next_floor: %d\n", next_floor);
 		printf("last_floor: %d\n", last_floor);

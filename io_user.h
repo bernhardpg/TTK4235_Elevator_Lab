@@ -2,6 +2,7 @@
 #define __IO_USER_H__
 
 #include <stdbool.h>
+#include "elev.h"
 
 
 /** 
@@ -15,7 +16,7 @@ void door_and_lights_handler( int current_floor);
 Set_lights takes in the queue and set lights
 */
 
-void set_orderd_lights(bool** queue);
+void set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]);
 
 /**
 Delay function
