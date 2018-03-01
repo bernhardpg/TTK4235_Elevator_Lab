@@ -23,19 +23,13 @@ void door_and_lights_handler(int current_floor){
 	    elev_set_button_lamp(j, i, 0);
 	}
     }
-
-     //Opens the door for 3 seconds
-    elev_set_door_open_lamp(1); 
-    delay(3000);  
-    elev_set_door_open_lamp(0); 
-    
-
    
 }
 
 void set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]) {
     // Set lights based on the queue (function is only called when
     // queue is updated)
+	
     for (int i = 0; i < N_FLOORS; i++)	{
 	for (int j = 0; j < N_BUTTONS; j++) {
 	    if ((queue[i][j] == true)

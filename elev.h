@@ -157,4 +157,10 @@ int elev_set_direction(int direction, int next_floor, int last_floor);
 */
 int elev_initialize_hardware(int direction);
 
+/**
+
+*/
+void elev_stop_button_handler(int current_floor);
+
+
 #endif // #ifndef __INCLUDE_DRIVER_H__

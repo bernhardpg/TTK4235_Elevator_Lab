@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "elev.h"
 #include "io.h"
@@ -12,8 +13,11 @@ int main () {
     // Initialize 'global' program variables
     int current_floor = -1;
     int last_floor = -1;
-    int direction = DIRN_UP;  // Which direction to look for new orders
+    int direction = DIRN_UP;		// Which direction to look for new orders
     int next_floor = -1;
+
+	clock_t start_time;				//Variable to keep track off stoptime
+	int time_delay = 3*1000000;		//How long the elev will stop, in this case 3 seconds
 
     bool queue[N_FLOORS][N_BUTTONS];
     queue_init(queue);
@@ -40,35 +44,38 @@ int main () {
 	// and open  door if currently on a floor
 	// **********
 	if (elev_get_stop_signal()) {
-	    elev_set_stop_lamp(1);
-	    if (!no_orders) {
+		elev_set_stop_lamp(1);
+		if (!no_orders) {
 			elev_stop_button_handler(current_floor);
 			queue_init(queue);
 			no_orders = true;
-	    }
-	}
+		}
+		elev_set_stop_lamp(0);
+	}	
 	
+		
 	// IDLE STATE - Do not move the elevator while there are no orders.
 	// *********
-	if (no_orders) {
-	    
+	else if (no_orders) {
+
+
 	    // Check for new orders for every iteration of the
 	    // program loop while the program is in IDLE STATE.
 	    // Break out of IDLE STATE once there are any orders.
 	    if (queue_update(queue)) {
 		
-		set_ordered_lights(queue);
+			set_ordered_lights(queue);
 
-		next_floor = queue_get_next_floor(queue, direction, last_floor);
+			next_floor = queue_get_next_floor(queue, direction, last_floor);
     
-		direction = elev_set_direction(direction, next_floor, last_floor);	
+			direction = elev_set_direction(direction, next_floor, last_floor);	
 
-		printf("next_floor: %d\n", next_floor);
-		printf("last_floor: %d\n", last_floor);
-		queue_print(queue);
+			printf("next_floor: %d\n", next_floor);
+			printf("last_floor: %d\n", last_floor);
+			queue_print(queue);
 
-		no_orders = false;
-		printf("CHANGING TO RUNNING STATE\n");
+			no_orders = false;
+			printf("CHANGING TO RUNNING STATE\n");
 	    }
 	}
 
@@ -99,11 +106,24 @@ int main () {
 	    // if the queue now is empty.
 	    if ((next_floor == last_floor)
 		    && (next_floor == current_floor)) {
-		elev_set_motor_direction(DIRN_STOP);
-		door_and_lights_handler(last_floor);
-		printf("Stopping at floor: %d\n", last_floor);
+			
+			elev_set_motor_direction(DIRN_STOP);
+			door_and_lights_handler(last_floor);			
+			
+			printf("Stopping at floor: %d\n", last_floor);
+			
+			elev_set_door_open_lamp(1);
+			start_time = clock();
+			while (clock() < start_time + time_delay) {
+				if (queue_update(queue)) {
+					set_ordered_lights(queue);
+					door_and_lights_handler(last_floor);			
+					next_floor = queue_get_next_floor(queue, direction, last_floor);
+				}
+			}
 
-		queue_reset(queue, last_floor);
+			elev_set_door_open_lamp(0);
+			queue_reset(queue, last_floor);
 
 		if (queue_empty(queue)) {
 		    printf("CHANGING TO IDLE STATE:\n");
@@ -134,17 +154,16 @@ int main () {
 	    // there are no more orders in the same direction as
 	    // the elevator is currently moving.
 	    if (next_floor == -1) {
-		direction *= -1;
-		elev_set_motor_direction(direction);
-		next_floor = queue_get_next_floor(queue, direction, last_floor);
+			direction *= -1;
+			elev_set_motor_direction(direction);
+			next_floor = queue_get_next_floor(queue, direction, last_floor);
 		
-		printf("******\nCHANGING DIRECTION\n******\n");
-		printf("next_floor: %d\n", next_floor);
-		printf("last_floor: %d\n", last_floor);
-		queue_print(queue);
+			printf("******\nCHANGING DIRECTION\n******\n");
+			printf("next_floor: %d\n", next_floor);
+			printf("last_floor: %d\n", last_floor);
+			queue_print(queue);
 	    }
 	}
-    }
-
+	}
     return 0;
 }
