@@ -48,7 +48,11 @@ int main () {
 		if (!no_orders) {
 			elev_stop_button_handler(current_floor);
 			queue_init(queue);
+			next_floor = -1;
 			no_orders = true;
+		}
+		else if (current_floor != -1) {
+			elev_set_door_open_lamp(1);	
 		}
 		elev_set_stop_lamp(0);
 	}	
@@ -65,6 +69,7 @@ int main () {
 	    if (queue_update(queue)) {
 		
 			set_ordered_lights(queue);
+			elev_set_door_open_lamp(0);
 
 			next_floor = queue_get_next_floor(queue, direction, last_floor);
     
@@ -82,10 +87,24 @@ int main () {
 	// RUNNING STATE - Elevator is running
 	// ***********
 	else {
+
+
 	    // Update last_floor for every iteration of the
 	    // program loop while the program is in RUNNING STATE.
-	    last_floor = elev_get_last_floor(last_floor);
 	    current_floor = elev_get_floor_sensor_signal();
+
+		printf("current_floor: %d\n", current_floor);
+		printf("last_floor: %d\n", last_floor);
+	
+		
+		if ((current_floor != last_floor)
+				&& (current_floor != -1)) {
+			elev_set_floor_indicator(current_floor);
+			printf("SETTING LIGHT!\n");
+		}
+
+	    last_floor = elev_get_last_floor(last_floor);
+	
 
 	    // Look for new orders from users
 	    // and update which order to exectute if the new order

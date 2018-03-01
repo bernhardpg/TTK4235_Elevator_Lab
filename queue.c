@@ -64,7 +64,7 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
 	    case DIRN_UP:
 		// Check for orders to move the elevator down
 		// and orders from the command console.
-		for (int i = last_floor; i < N_FLOORS; i++) {
+		for (int i = last_floor + 1; i < N_FLOORS; i++) {
 		    if ((queue[i][2])
 			    || (queue[i][0])) {
 			return i;
@@ -86,7 +86,7 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
 	    case DIRN_DOWN:
 		// Check for orders to move the elevator down 
 		// and orders from the command console.
-		for (int i = last_floor; i > 0; i--) {
+		for (int i = last_floor - 1; i >= 0; i--) {
 		    if ((queue[i][2])
 			    || (queue[i][1])) {
 			return i;
