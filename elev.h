@@ -139,11 +139,6 @@ int elev_get_button_lamp(elev_button_type_t button, int floor);
 */
 int elev_get_last_floor(int last_floor);
 
-/**
-Returns the current/last floor
-*/ 
-int elev_get_last_floor(int last_floor);
-
 
 /**
  Sets direction depending on next_floor and last_floor.
@@ -153,14 +148,19 @@ int elev_set_direction(int direction, int next_floor, int last_floor);
 
 
 /**
- Initilize the elevator to start position.
+ Initilize the elevator
+ Prints "unable to initialize elevator hardware" if failed
+ @direction to start the elevator 
+ @return 0 if succes, 1 if failure
 */
 int elev_initialize_hardware(int direction);
 
 /**
-
+	Stops the motor and turns of all lamps since queue is cleared
 */
-void elev_stop_button_handler(int current_floor);
+void elev_stop_button_handler();
+
+
 
 
 #endif // #ifndef __INCLUDE_DRIVER_H__

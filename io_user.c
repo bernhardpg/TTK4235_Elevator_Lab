@@ -11,9 +11,11 @@
 #include <stdbool.h>
 
 
-void door_and_lights_handler(int current_floor){
+void io_user_clear_lights_on_floor(int current_floor){
    
+	//changes floor indicator to current floor
     elev_set_floor_indicator(current_floor); 
+
     // Shuts of all the lights on current floor (all orders on
     // current floor completed)
     int i = current_floor;
@@ -26,7 +28,7 @@ void door_and_lights_handler(int current_floor){
    
 }
 
-void set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]) {
+void io_user_set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]) {
     // Set lights based on the queue (function is only called when
     // queue is updated)
 	
@@ -43,11 +45,4 @@ void set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]) {
 
 
 
-void delay(int ms) {
-    int time = 1000 * ms;
-
-    clock_t start_time = clock();
-
-    while (clock() < start_time + time);
-}
 

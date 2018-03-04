@@ -1,3 +1,5 @@
+// 
+
 #ifndef __IO_USER_H__
 #define __IO_USER_H__
 
@@ -6,24 +8,20 @@
 
 
 /** 
-Stop_handler is the function that opens the door, turns off
-lights at current floor and removes from queue. WILL TAKE 3 SECONDS
+ Changes floor indicator and turns off all lights on current floor
+ @param current_floor current floor of the elevator
 */
 
-void door_and_lights_handler( int current_floor); 
+void io_user_clear_lights_order_completed(int current_floor); 
 
 /**
-Set_lights takes in the queue and set lights
+ Turns on all lights based on queue
+ Uses whole queue since many buttons can be pushed simultaneously
+ @param queue   
 */
 
-void set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]);
+void io_user_set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]);
 
-/**
-Delay function
-Param ms is milliseconds the function should take. 
-
-*/
-void delay(int ms);
 
 #endif
 
