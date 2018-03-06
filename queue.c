@@ -35,8 +35,10 @@ bool queue_update(bool queue[N_FLOORS][N_BUTTONS]) {
 			if (!((j == 1) && (i == 0))
 				&& !((j == 0) && (i == 3))
 				&& (elev_get_button_signal(j, i))) {
-			queue_set(queue, i, j);
-			return true;
+			if (!queue[i][j]) {
+			    queue_set(queue, i, j);
+			    return true;
+			}
 			}
 		}
     }
@@ -61,7 +63,7 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
 
     switch (direction) {
 	    case DIRN_UP:
-		// Check for orders to move the elevator down
+		// Check for orders to move the elevator up 
 		// and orders from the command console.
 		for (int i = last_floor + 1; i < N_FLOORS; i++) {
 		    if ((queue[i][2])
@@ -70,12 +72,11 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
 		    }
 		}
 		// Check for orders to go down if there are
-		// no more orders to go down or from the
-		// command console. If there exists orders to go down
-		// and there are no current order (last_floor == -1),
-		// return the floor of this new order to go up.
+		// no more up orders from up or command buttons.
+		// If there exists orders to go down
+		// return the floor of this new order.
 		for (int i = N_FLOORS - 1; i > last_floor - 1; i--) {
-		    if (queue[i][1]) {
+		    if (queue[i][1] || queue[i][2]) {
 			return i;
 		    }
 		}
@@ -92,12 +93,11 @@ int queue_get_next_floor(bool queue[N_FLOORS][N_BUTTONS],
 		    }
 		}
 		// Check for orders to go up if there are
-		// no more orders to go down or from the
-		// command console. If there exists orders to go
-		// up and there are no current order (next_floor == -1),
-		// return the floor of this new order to go down.
+		// no more down orders from down or command buttons.
+		// If there exists orders to go up
+		// return the floor of this new order.
 		for (int i = 0; i < last_floor + 1; i++) {
-		    if (queue[i][0]) {
+		    if (queue[i][0] || queue[i][2]) {
 			return i;
 		    }
 		}

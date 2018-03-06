@@ -12,7 +12,7 @@
  @param current_floor current floor of the elevator
 */
 
-void io_user_clear_lights_order_completed(int current_floor); 
+void io_user_clear_lights_on_floor(int current_floor); 
 
 /**
  Turns on all lights based on queue

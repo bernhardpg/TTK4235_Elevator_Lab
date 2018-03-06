@@ -47,6 +47,9 @@ int main () {
 	// **********
 	if (elev_get_stop_signal()) {
 		elev_set_stop_lamp(1);
+		if (next_floor == last_floor) {
+		    direction *= -1;
+		}
 		if (!no_orders) {
 			elev_stop_button_handler(current_floor);
 			queue_init(queue);
@@ -74,7 +77,10 @@ int main () {
 			elev_set_door_open_lamp(0);
 
 			next_floor = queue_get_next_floor(queue, direction, last_floor);
-    
+
+			if (next_floor == last_floor) {
+			    direction *= -1;
+			} 
 			direction = elev_set_direction(direction, next_floor, last_floor);	
 
 			printf("next_floor: %d\n", next_floor);
@@ -90,20 +96,12 @@ int main () {
 	// ***********
 	else {
 
-
+	    direction = elev_set_direction(direction, next_floor, last_floor);
 	    // Update last_floor for every iteration of the
 	    // program loop while the program is in RUNNING STATE.
 	    current_floor = elev_get_floor_sensor_signal();
 
-		printf("current_floor: %d\n", current_floor);
-		printf("last_floor: %d\n", last_floor);
-	
-		
-		if ((current_floor != last_floor)
-				&& (current_floor != -1)) {
-			elev_set_floor_indicator(current_floor);
-			printf("SETTING LIGHT!\n");
-		}
+	    elev_set_floor_indicator(last_floor);
 
 	    last_floor = elev_get_last_floor(last_floor);
 	
@@ -124,7 +122,7 @@ int main () {
 	    // Stop the elevator and open the doors for three
 	    // seconds when a destination is reached,
 	    // remove finished order from queue and go into IDLE STATE
-	    // if the queue now is empty.
+	    // if the queue now is empty
 	    if ((next_floor == last_floor)
 		    && (next_floor == current_floor)) {
 			
@@ -175,8 +173,8 @@ int main () {
 	    // the elevator is currently moving.
 	    if (next_floor == -1) {
 			direction *= -1;
-			elev_set_motor_direction(direction);
 			next_floor = queue_get_next_floor(queue, direction, last_floor);
+			direction = elev_set_direction(direction, next_floor, last_floor);
 		
 			printf("******\nCHANGING DIRECTION\n******\n");
 			printf("next_floor: %d\n", next_floor);
