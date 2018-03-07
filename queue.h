@@ -1,3 +1,6 @@
+// Implementation of the order queue.
+// 2018, Theodor Husefest and Bernhard Paus Græsdal.
+
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
 
@@ -5,7 +8,7 @@
 #include "elev.h"
 
 /**
- Initialize all element of the queue to false 
+ Initialize all 'bits' of the queue to false.
 */
 void queue_init(bool queue[N_FLOORS][N_BUTTONS]);
 
@@ -35,10 +38,10 @@ bool queue_update(bool queue[N_FLOORS][N_BUTTONS]);
 
 
 /**
- Returns the next floor to move the elevator to.
- If elevator is moving up: checks for new orders to
+ Return the next floor to move the elevator to.
+ If elevator is moving up: check for new orders to
  floors above the current floor.
- If elevator is moving down: checks for new orders to
+ If elevator is moving down: check for new orders to
  floors below the current floor.
  @return Floor number as integer between 0-3.
  @return -1 if there are no orders above/below the current floor.

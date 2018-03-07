@@ -2,11 +2,14 @@
 // These functions provides an interface to the elevators in the real time lab
 //
 // 2007, Martin Korsgaard
+//
+// 2018, modified by Theodor Husefest and Bernhard Paus Græsdal.
+
 #ifndef __INCLUDE_DRIVER_H__
 #define __INCLUDE_DRIVER_H__
 
 
-// Number of floors
+// Define global program variables.
 #define N_FLOORS 4
 #define N_BUTTONS 3
 
@@ -19,7 +22,6 @@
 int elev_init(void);
 
 
-
 /**
   Motor direction for function elev_set_motor_direction().
 */
@@ -28,7 +30,6 @@ typedef enum tag_elev_motor_direction {
     DIRN_STOP = 0,
     DIRN_UP = 1
 } elev_motor_direction_t;
-
 
 
 /**
@@ -108,7 +109,7 @@ typedef enum tag_elev_lamp_type {
 /**
   Gets a button signal.
   @param button Which button type to check. Can be BUTTON_CALL_UP,
-    BUTTON_CALL_DOWN or BUTTON_COMMAND (button "inside the elevator).
+   BUTTON_CALL_DOWN or BUTTON_COMMAND (button inside the elevator).
   @param floor Which floor to check button. Must be 0-3.
   @return 0 if button is not pushed. 1 if button is pushed.
 */
@@ -119,7 +120,7 @@ int elev_get_button_signal(elev_button_type_t button, int floor);
 /**
   Set a button lamp.
   @param lamp Which type of lamp to set. Can be BUTTON_CALL_UP,
-    BUTTON_CALL_DOWN or BUTTON_COMMAND (button "inside" the elevator).
+   BUTTON_CALL_DOWN or BUTTON_COMMAND (button inside" the elevator).
   @param floor Floor of lamp to set. Must be 0-3
   @param value Non-zero value turns lamp on, 0 turns lamp off.
 */
@@ -156,7 +157,7 @@ int elev_set_direction(int direction, int next_floor, int last_floor);
 int elev_initialize_hardware(int direction);
 
 /**
-	Stops the motor and turns of all lamps since queue is cleared
+ Stops the motor and turns of all lamps since queue is cleared
 */
 void elev_stop_button_handler();
 

@@ -2,7 +2,8 @@
 // These functions provides an interface to the elevators in the real time lab
 //
 // 2007, Martin Korsgaard
-
+//
+// 2018, modified by Theodor Husefest and Bernhard Paus Græsdal.
 
 #include "channels.h"
 #include "elev.h"
@@ -30,11 +31,11 @@ static const int button_channel_matrix[N_FLOORS][N_BUTTONS] = {
 int elev_init(void) {
     int i;
 
-    // Init hardware
+    // Init hardware.
     if (!io_init())
         return 0;
 
-    // Zero all floor button lamps
+    // Zero all floor button lamps.
     for (i = 0; i < N_FLOORS; ++i) {
         if (i != 0)
             elev_set_button_lamp(BUTTON_CALL_DOWN, i, 0);
@@ -160,14 +161,12 @@ int elev_get_button_lamp(elev_button_type_t button, int floor) {
 
 
 int elev_get_last_floor(int last_floor) {
-    // Gets last floor
-
     int floor_sensor_signal = elev_get_floor_sensor_signal();
 
     if ((floor_sensor_signal != last_floor)
 	    && (floor_sensor_signal > -1)) {
 
-				return floor_sensor_signal;
+	return floor_sensor_signal;
     }
     
     return last_floor;
@@ -175,12 +174,11 @@ int elev_get_last_floor(int last_floor) {
 
 
 int elev_set_direction(int direction, int next_floor, int last_floor) {
-
     if (next_floor == -1) {
 	return direction;
     }
 
-    // Start elevator in the right direction
+    // Calculate the correct direction and start elevator.
     if (next_floor > last_floor) {
 	direction = DIRN_UP;
     }
@@ -195,8 +193,6 @@ int elev_set_direction(int direction, int next_floor, int last_floor) {
 
 
 int elev_initialize_hardware(int direction) {
-    // Initialize hardware
-    
     if (!elev_init()) {
 	printf("Unable to initialize elevator hardware!\n");
 	return 1;
@@ -208,18 +204,18 @@ int elev_initialize_hardware(int direction) {
 
 
 void elev_stop_button_handler() {
-	//Stops motor and turns on stop button lamp
-	elev_set_motor_direction(DIRN_STOP);
+    //Stop motor and turn on stop button lamp.
+    elev_set_motor_direction(DIRN_STOP);
 
-	//Turns all lights off since queue is cleared
-	for (int i = 0; i < N_FLOORS; ++i) {
-        if (i != 0)
-            elev_set_button_lamp(BUTTON_CALL_DOWN, i, 0);
-        
-		if (i != N_FLOORS - 1)
-            elev_set_button_lamp(BUTTON_CALL_UP, i, 0);
+    //Turn all lights off.
+    for (int i = 0; i < N_FLOORS; ++i) {
+	if (i != 0)
+	    elev_set_button_lamp(BUTTON_CALL_DOWN, i, 0);
+	
+	if (i != N_FLOORS - 1)
+	    elev_set_button_lamp(BUTTON_CALL_UP, i, 0);
 
-        elev_set_button_lamp(BUTTON_COMMAND, i, 0);
+	elev_set_button_lamp(BUTTON_COMMAND, i, 0);
     }
 }
 
