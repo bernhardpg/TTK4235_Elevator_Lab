@@ -135,6 +135,7 @@ int main () {
 		elev_set_door_open_lamp(1);
 		start_time = clock();
 
+		// DOOR OPEN STATE - Open the elevator doors.
 		while (clock() < start_time + time_delay) {
 		    if (queue_update(queue)) {
 			io_user_set_ordered_lights(queue);
