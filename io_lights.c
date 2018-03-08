@@ -11,7 +11,7 @@
 #include <stdbool.h>
 
 
-void io_user_clear_lights_on_floor(int current_floor){
+void io_lights_clear_lights_on_floor(int current_floor){
    
     //Change floor indicator to current floor.
     elev_set_floor_indicator(current_floor); 
@@ -27,7 +27,7 @@ void io_user_clear_lights_on_floor(int current_floor){
    
 }
 
-void io_user_set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]) {
+void io_lights_set_ordered_lights(bool queue[N_FLOORS][N_BUTTONS]) {
     // Set lights based on the queue (function is only called when
     // queue is updated).
 	

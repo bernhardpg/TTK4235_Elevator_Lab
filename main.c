@@ -19,9 +19,9 @@ int main () {
     int current_floor = -1;		// Sensor floor signal. Will be -1 if elevator is inbetween floors.
     int last_floor = -1;		// Keeps track of the last known floor.
     int next_floor = -1;		// Working variable used to hold the calculated next floor.	
-    int direction = DIRN_UP;		// Working variable used to know which direction in the queue to look for new orders.
+    int direction = DIRN_UP;	// Working variable used to know which direction in the queue to look for new orders.
 
-    clock_t start_time;			// Variable to keep track off the doors.
+    clock_t start_time;				// Variable to keep track off the doors.
     int time_delay = 3*1000000;		// How long the elev will stop (in this case 3 seconds).
 
     bool queue[N_FLOORS][N_BUTTONS];	// Two dimensional matrix corresponding to all available elevator buttons.
@@ -38,7 +38,6 @@ int main () {
 	last_floor = elev_get_last_floor(last_floor);
 	if (last_floor != -1) {
 	    elev_set_motor_direction(DIRN_STOP);
-	    printf("CHANGING TO IDLE STATE\n");
 	    break;
 	}
     }
@@ -87,7 +86,7 @@ int main () {
 
 	    if (queue_update(queue)) {
 	
-		io_user_set_ordered_lights(queue);
+		io_lights_set_ordered_lights(queue);
 		elev_set_door_open_lamp(0);
 
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
@@ -118,7 +117,7 @@ int main () {
 	    // the new order 'on the way' (does not change directon
 	    // or affect the engine).
 	    if (queue_update(queue)) {
-		io_user_set_ordered_lights(queue);
+		io_lights_set_ordered_lights(queue);
 		next_floor = queue_get_next_floor(queue, direction, last_floor);
 	    }
 
@@ -130,7 +129,7 @@ int main () {
 		    && (next_floor == current_floor)) {
 			
 		elev_set_motor_direction(DIRN_STOP);
-		io_user_clear_lights_on_floor(last_floor);			
+		io_lights_clear_lights_on_floor(last_floor);			
 		
 		elev_set_door_open_lamp(1);
 		start_time = clock();
@@ -138,8 +137,8 @@ int main () {
 		// DOOR OPEN STATE - Open the elevator doors.
 		while (clock() < start_time + time_delay) {
 		    if (queue_update(queue)) {
-			io_user_set_ordered_lights(queue);
-			io_user_clear_lights_on_floor(last_floor);			
+			io_lights_set_ordered_lights(queue);
+			io_lights_clear_lights_on_floor(last_floor);			
 		    }
 		}
 

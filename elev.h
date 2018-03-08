@@ -157,7 +157,7 @@ int elev_set_direction(int direction, int next_floor, int last_floor);
 int elev_initialize_hardware(int direction);
 
 /**
- Stops the motor and turns of all lamps since queue is cleared
+ Stops the motor and turns of all lightss since queue is cleared
 */
 void elev_stop_button_handler();
 

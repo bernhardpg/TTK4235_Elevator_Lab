@@ -3,7 +3,7 @@
 //
 // 2007, Martin Korsgaard
 //
-// 2018, modified by Theodor Husefest and Bernhard Paus Græsdal.
+// 2018, modified by Theodor Tveit Husefest and Bernhard Paus Græsdal.
 
 #include "channels.h"
 #include "elev.h"
